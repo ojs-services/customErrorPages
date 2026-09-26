@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: customErrorPages\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.customErrorPages.displayName"
+msgstr "Custom Error Pages"
+
+msgid "plugins.generic.customErrorPages.description"
+msgstr "Renders a friendly, theme-styled 404 (Page not found) instead of OJS's bare error message. Works with any theme and OJS 3.3.0-x."
+
+msgid "plugins.generic.customErrorPages.404.title"
+msgstr "Page not found"
+
+msgid "plugins.generic.customErrorPages.404.body"
+msgstr "The page you were looking for doesn't exist or may have moved."
+
+msgid "plugins.generic.customErrorPages.404.home"
+msgstr "Back to home"
+
+msgid "plugins.generic.customErrorPages.404.code"
+msgstr "Error 404"
+
+msgid "plugins.generic.customErrorPages.settings.help"
+msgstr "Choose how the 404 page looks. Photo styles load one image of about 100 KB; colour styles and \"Theme colours\" load nothing extra."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl"
+msgstr "Your own image URL (for style 12)"
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.invalid"
+msgstr "The background image URL must be a complete http:// or https:// address of at most 255 characters, with no spaces, quotes, parentheses or backslashes."
+
+msgid "plugins.generic.customErrorPages.file.title"
+msgstr "File not found"
+
+msgid "plugins.generic.customErrorPages.file.code"
+msgstr "Error 404"
+
+msgid "plugins.generic.customErrorPages.file.body"
+msgstr "The file you requested is not available right now. The article itself is still accessible."
+
+msgid "plugins.generic.customErrorPages.file.issueBody"
+msgstr "The file you requested is not available right now. The issue itself is still accessible."
+
+msgid "plugins.generic.customErrorPages.file.backToArticle"
+msgstr "Back to the article"
+
+msgid "plugins.generic.customErrorPages.file.backToIssue"
+msgstr "Back to the issue"
+
+msgid "plugins.generic.customErrorPages.settings.style"
+msgstr "Error page style"
+
+msgid "plugins.generic.customErrorPages.settings.style.invalid"
+msgstr "Please choose one of the listed styles."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.hint"
+msgstr "Tip: upload the image under Settings → Workflow → Publisher Library, tick \"Public access\", then paste the public link here."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.required"
+msgstr "Style 12 needs an image URL."
+
+msgid "plugins.generic.customErrorPages.style.theme.name"
+msgstr "Theme colours"
+
+msgid "plugins.generic.customErrorPages.style.theme.desc"
+msgstr "No background; the page follows your theme. Lightest option."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.name"
+msgstr "Sandstone, white card"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.desc"
+msgstr "Sandstone photo with the message on a white card."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.name"
+msgstr "Sandstone, dark"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.desc"
+msgstr "Darkened sandstone photo, white text."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.name"
+msgstr "Sandstone, light"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.desc"
+msgstr "Sandstone photo under a light veil, dark text."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.name"
+msgstr "Sandstone, plain"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.desc"
+msgstr "Sandstone photo as it is; text in your theme colours."
+
+msgid "plugins.generic.customErrorPages.style.navy.name"
+msgstr "Navy"
+
+msgid "plugins.generic.customErrorPages.style.navy.desc"
+msgstr "Deep navy gradient, white text."
+
+msgid "plugins.generic.customErrorPages.style.slate.name"
+msgstr "Slate"
+
+msgid "plugins.generic.customErrorPages.style.slate.desc"
+msgstr "Slate grey gradient, white text."
+
+msgid "plugins.generic.customErrorPages.style.forest.name"
+msgstr "Forest"
+
+msgid "plugins.generic.customErrorPages.style.forest.desc"
+msgstr "Dark green gradient, white text."
+
+msgid "plugins.generic.customErrorPages.style.burgundy.name"
+msgstr "Burgundy"
+
+msgid "plugins.generic.customErrorPages.style.burgundy.desc"
+msgstr "Burgundy gradient, white text."
+
+msgid "plugins.generic.customErrorPages.style.sand.name"
+msgstr "Sand"
+
+msgid "plugins.generic.customErrorPages.style.sand.desc"
+msgstr "Warm sand colour, dark text."
+
+msgid "plugins.generic.customErrorPages.style.dots.name"
+msgstr "Dots"
+
+msgid "plugins.generic.customErrorPages.style.dots.desc"
+msgstr "Light grey with a subtle dot pattern, dark text."
+
+msgid "plugins.generic.customErrorPages.style.custom.name"
+msgstr "Your own image"
+
+msgid "plugins.generic.customErrorPages.style.custom.desc"
+msgstr "Your image (URL below) with the message on a white card."

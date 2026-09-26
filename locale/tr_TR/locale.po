@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: customErrorPages\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.customErrorPages.displayName"
+msgstr "Özel Hata Sayfaları"
+
+msgid "plugins.generic.customErrorPages.description"
+msgstr "OJS'nin çıplak hata mesajı yerine temayla uyumlu bir 404 (Sayfa bulunamadı) sayfası gösterir. Her tema ve OJS 3.3.0-x ile çalışır."
+
+msgid "plugins.generic.customErrorPages.404.title"
+msgstr "Sayfa bulunamadı"
+
+msgid "plugins.generic.customErrorPages.404.body"
+msgstr "Aradığınız sayfa mevcut değil ya da taşınmış olabilir."
+
+msgid "plugins.generic.customErrorPages.404.home"
+msgstr "Ana sayfaya dön"
+
+msgid "plugins.generic.customErrorPages.404.code"
+msgstr "Hata 404"
+
+msgid "plugins.generic.customErrorPages.settings.help"
+msgstr "Hata sayfasının görünümünü seçin. Fotoğraflı stiller yaklaşık 100 KB'lık tek bir görsel yükler; renkli stiller ve \"Tema renkleri\" ek bir şey yüklemez."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl"
+msgstr "Kendi görselinizin URL'si (12. stil için)"
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.invalid"
+msgstr "Arka plan görseli URL'si en fazla 255 karakterlik, tam bir http:// veya https:// adresi olmalı; boşluk, tırnak, parantez ya da ters eğik çizgi içeremez."
+
+msgid "plugins.generic.customErrorPages.file.title"
+msgstr "Dosya bulunamadı"
+
+msgid "plugins.generic.customErrorPages.file.code"
+msgstr "Hata 404"
+
+msgid "plugins.generic.customErrorPages.file.body"
+msgstr "İstediğiniz dosyaya şu anda ulaşılamıyor. Makalenin kendisine erişmeye devam edebilirsiniz."
+
+msgid "plugins.generic.customErrorPages.file.issueBody"
+msgstr "İstediğiniz dosyaya şu anda ulaşılamıyor. Sayının kendisine erişmeye devam edebilirsiniz."
+
+msgid "plugins.generic.customErrorPages.file.backToArticle"
+msgstr "Makaleye dön"
+
+msgid "plugins.generic.customErrorPages.file.backToIssue"
+msgstr "Sayıya dön"
+
+msgid "plugins.generic.customErrorPages.settings.style"
+msgstr "Hata sayfası stili"
+
+msgid "plugins.generic.customErrorPages.settings.style.invalid"
+msgstr "Lütfen listedeki stillerden birini seçin."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.hint"
+msgstr "İpucu: Görseli Ayarlar → İş Akışı → Yayıncı Kütüphanesi'ne yükleyin, \"Herkese açık erişim\"i işaretleyin ve herkese açık bağlantıyı buraya yapıştırın."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.required"
+msgstr "12. stil için bir görsel URL'si gerekir."
+
+msgid "plugins.generic.customErrorPages.style.theme.name"
+msgstr "Tema renkleri"
+
+msgid "plugins.generic.customErrorPages.style.theme.desc"
+msgstr "Arka plan yok; sayfa temanızın görünümünü izler. En hafif seçenek."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.name"
+msgstr "Kum taşı, beyaz kart"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.desc"
+msgstr "Kum taşı fotoğrafı, mesaj beyaz bir kartta."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.name"
+msgstr "Kum taşı, koyu"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.desc"
+msgstr "Koyulaştırılmış kum taşı fotoğrafı, beyaz metin."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.name"
+msgstr "Kum taşı, açık"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.desc"
+msgstr "Açık bir perde altında kum taşı fotoğrafı, koyu metin."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.name"
+msgstr "Kum taşı, sade"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.desc"
+msgstr "Kum taşı fotoğrafı olduğu gibi; metin tema renklerinde."
+
+msgid "plugins.generic.customErrorPages.style.navy.name"
+msgstr "Lacivert"
+
+msgid "plugins.generic.customErrorPages.style.navy.desc"
+msgstr "Koyu lacivert geçişli zemin, beyaz metin."
+
+msgid "plugins.generic.customErrorPages.style.slate.name"
+msgstr "Arduvaz"
+
+msgid "plugins.generic.customErrorPages.style.slate.desc"
+msgstr "Arduvaz grisi geçişli zemin, beyaz metin."
+
+msgid "plugins.generic.customErrorPages.style.forest.name"
+msgstr "Orman"
+
+msgid "plugins.generic.customErrorPages.style.forest.desc"
+msgstr "Koyu yeşil geçişli zemin, beyaz metin."
+
+msgid "plugins.generic.customErrorPages.style.burgundy.name"
+msgstr "Bordo"
+
+msgid "plugins.generic.customErrorPages.style.burgundy.desc"
+msgstr "Bordo geçişli zemin, beyaz metin."
+
+msgid "plugins.generic.customErrorPages.style.sand.name"
+msgstr "Kum"
+
+msgid "plugins.generic.customErrorPages.style.sand.desc"
+msgstr "Sıcak kum rengi, koyu metin."
+
+msgid "plugins.generic.customErrorPages.style.dots.name"
+msgstr "Noktalı"
+
+msgid "plugins.generic.customErrorPages.style.dots.desc"
+msgstr "Hafif nokta desenli açık gri, koyu metin."
+
+msgid "plugins.generic.customErrorPages.style.custom.name"
+msgstr "Kendi görseliniz"
+
+msgid "plugins.generic.customErrorPages.style.custom.desc"
+msgstr "Görseliniz (aşağıdaki URL), mesaj beyaz bir kartta."

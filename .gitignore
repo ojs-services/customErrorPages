@@ -1,0 +1,5 @@
+docs/
+*.tar.gz
+.DS_Store
+Thumbs.db
+/tmp/

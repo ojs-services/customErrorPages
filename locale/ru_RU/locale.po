@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: customErrorPages\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.customErrorPages.displayName"
+msgstr "Пользовательские страницы ошибок"
+
+msgid "plugins.generic.customErrorPages.description"
+msgstr "Показывает дружелюбную страницу 404 (Страница не найдена) в стиле темы вместо простого сообщения об ошибке OJS. Работает с любой темой и OJS 3.3.0-x."
+
+msgid "plugins.generic.customErrorPages.404.title"
+msgstr "Страница не найдена"
+
+msgid "plugins.generic.customErrorPages.404.body"
+msgstr "Запрашиваемая страница не существует или была перемещена."
+
+msgid "plugins.generic.customErrorPages.404.home"
+msgstr "На главную"
+
+msgid "plugins.generic.customErrorPages.404.code"
+msgstr "Ошибка 404"
+
+msgid "plugins.generic.customErrorPages.settings.help"
+msgstr "Выберите оформление страницы 404. Стили с фотографией загружают одно изображение около 100 КБ; цветные стили и «Цвета темы» ничего дополнительно не загружают."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl"
+msgstr "URL собственного изображения (для стиля 12)"
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.invalid"
+msgstr "URL фонового изображения должен быть полным адресом http:// или https:// длиной не более 255 символов, без пробелов, кавычек, скобок и обратных косых черт."
+
+msgid "plugins.generic.customErrorPages.file.title"
+msgstr "Файл не найден"
+
+msgid "plugins.generic.customErrorPages.file.code"
+msgstr "Ошибка 404"
+
+msgid "plugins.generic.customErrorPages.file.body"
+msgstr "Запрошенный файл сейчас недоступен. Сама статья по-прежнему доступна."
+
+msgid "plugins.generic.customErrorPages.file.issueBody"
+msgstr "Запрошенный файл сейчас недоступен. Сам выпуск по-прежнему доступен."
+
+msgid "plugins.generic.customErrorPages.file.backToArticle"
+msgstr "Вернуться к статье"
+
+msgid "plugins.generic.customErrorPages.file.backToIssue"
+msgstr "Вернуться к выпуску"
+
+msgid "plugins.generic.customErrorPages.settings.style"
+msgstr "Стиль страницы ошибки"
+
+msgid "plugins.generic.customErrorPages.settings.style.invalid"
+msgstr "Выберите один из стилей в списке."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.hint"
+msgstr "Совет: загрузите изображение в «Настройки → Рабочий процесс → Библиотека издателя», отметьте «Публичный доступ» и вставьте сюда публичную ссылку."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.required"
+msgstr "Для стиля 12 нужен URL изображения."
+
+msgid "plugins.generic.customErrorPages.style.theme.name"
+msgstr "Цвета темы"
+
+msgid "plugins.generic.customErrorPages.style.theme.desc"
+msgstr "Без фона; страница следует вашей теме. Самый лёгкий вариант."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.name"
+msgstr "Песчаник, белая карточка"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.desc"
+msgstr "Фото песчаника, сообщение на белой карточке."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.name"
+msgstr "Песчаник, тёмный"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.desc"
+msgstr "Затемнённое фото песчаника, белый текст."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.name"
+msgstr "Песчаник, светлый"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.desc"
+msgstr "Фото песчаника под светлой вуалью, тёмный текст."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.name"
+msgstr "Песчаник, без эффектов"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.desc"
+msgstr "Фото песчаника как есть; текст в цветах темы."
+
+msgid "plugins.generic.customErrorPages.style.navy.name"
+msgstr "Тёмно-синий"
+
+msgid "plugins.generic.customErrorPages.style.navy.desc"
+msgstr "Тёмно-синий градиент, белый текст."
+
+msgid "plugins.generic.customErrorPages.style.slate.name"
+msgstr "Графит"
+
+msgid "plugins.generic.customErrorPages.style.slate.desc"
+msgstr "Серо-графитовый градиент, белый текст."
+
+msgid "plugins.generic.customErrorPages.style.forest.name"
+msgstr "Лес"
+
+msgid "plugins.generic.customErrorPages.style.forest.desc"
+msgstr "Тёмно-зелёный градиент, белый текст."
+
+msgid "plugins.generic.customErrorPages.style.burgundy.name"
+msgstr "Бордовый"
+
+msgid "plugins.generic.customErrorPages.style.burgundy.desc"
+msgstr "Бордовый градиент, белый текст."
+
+msgid "plugins.generic.customErrorPages.style.sand.name"
+msgstr "Песок"
+
+msgid "plugins.generic.customErrorPages.style.sand.desc"
+msgstr "Тёплый песочный цвет, тёмный текст."
+
+msgid "plugins.generic.customErrorPages.style.dots.name"
+msgstr "Точки"
+
+msgid "plugins.generic.customErrorPages.style.dots.desc"
+msgstr "Светло-серый с лёгким точечным узором, тёмный текст."
+
+msgid "plugins.generic.customErrorPages.style.custom.name"
+msgstr "Своё изображение"
+
+msgid "plugins.generic.customErrorPages.style.custom.desc"
+msgstr "Ваше изображение (URL ниже), сообщение на белой карточке."

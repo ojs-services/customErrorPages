@@ -1,0 +1,6 @@
+# Kept out of release archives (git archive / GitHub source downloads).
+/screenshots export-ignore
+/tools export-ignore
+/RELEASING.md export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore

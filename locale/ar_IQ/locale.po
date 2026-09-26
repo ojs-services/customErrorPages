@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: customErrorPages\n"
+"Language: ar_IQ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.customErrorPages.displayName"
+msgstr "صفحات خطأ مخصّصة"
+
+msgid "plugins.generic.customErrorPages.description"
+msgstr "تعرض صفحة 404 (الصفحة غير موجودة) بنمط السمة بدلاً من رسالة الخطأ الأساسية في OJS. تعمل مع أي سمة وأي إصدار من OJS 3.3.0-x."
+
+msgid "plugins.generic.customErrorPages.404.title"
+msgstr "الصفحة غير موجودة"
+
+msgid "plugins.generic.customErrorPages.404.body"
+msgstr "الصفحة التي تبحث عنها غير موجودة أو ربما تم نقلها."
+
+msgid "plugins.generic.customErrorPages.404.home"
+msgstr "العودة إلى الرئيسية"
+
+msgid "plugins.generic.customErrorPages.404.code"
+msgstr "خطأ 404"
+
+msgid "plugins.generic.customErrorPages.settings.help"
+msgstr "اختر مظهر صفحة 404. أنماط الصور تحمّل صورة واحدة بحجم 100 كيلوبايت تقريبًا؛ أنماط الألوان و«ألوان القالب» لا تحمّل شيئًا إضافيًا."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl"
+msgstr "رابط صورتك الخاصة (للنمط 12)"
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.invalid"
+msgstr "يجب أن يكون رابط صورة الخلفية عنوان http:// أو https:// كاملًا لا يتجاوز 255 حرفًا، دون مسافات أو علامات اقتباس أو أقواس أو شرطات مائلة عكسية."
+
+msgid "plugins.generic.customErrorPages.file.title"
+msgstr "الملف غير موجود"
+
+msgid "plugins.generic.customErrorPages.file.code"
+msgstr "خطأ 404"
+
+msgid "plugins.generic.customErrorPages.file.body"
+msgstr "الملف الذي طلبته غير متاح حاليًا. لا يزال المقال نفسه متاحًا."
+
+msgid "plugins.generic.customErrorPages.file.issueBody"
+msgstr "الملف الذي طلبته غير متاح حاليًا. لا يزال العدد نفسه متاحًا."
+
+msgid "plugins.generic.customErrorPages.file.backToArticle"
+msgstr "العودة إلى المقال"
+
+msgid "plugins.generic.customErrorPages.file.backToIssue"
+msgstr "العودة إلى العدد"
+
+msgid "plugins.generic.customErrorPages.settings.style"
+msgstr "نمط صفحة الخطأ"
+
+msgid "plugins.generic.customErrorPages.settings.style.invalid"
+msgstr "يرجى اختيار أحد الأنماط المدرجة."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.hint"
+msgstr "تلميح: ارفع الصورة من الإعدادات ← سير العمل ← مكتبة الناشر، وفعّل «الوصول العام»، ثم الصق الرابط العام هنا."
+
+msgid "plugins.generic.customErrorPages.settings.backgroundImageUrl.required"
+msgstr "يحتاج النمط 12 إلى رابط صورة."
+
+msgid "plugins.generic.customErrorPages.style.theme.name"
+msgstr "ألوان القالب"
+
+msgid "plugins.generic.customErrorPages.style.theme.desc"
+msgstr "بلا خلفية؛ تتبع الصفحة قالبك. الخيار الأخف."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.name"
+msgstr "حجر رملي، بطاقة بيضاء"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-card.desc"
+msgstr "صورة حجر رملي والرسالة على بطاقة بيضاء."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.name"
+msgstr "حجر رملي، داكن"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-dark.desc"
+msgstr "صورة حجر رملي معتّمة، نص أبيض."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.name"
+msgstr "حجر رملي، فاتح"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-light.desc"
+msgstr "صورة حجر رملي تحت طبقة فاتحة، نص داكن."
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.name"
+msgstr "حجر رملي، بسيط"
+
+msgid "plugins.generic.customErrorPages.style.sandstone-plain.desc"
+msgstr "صورة الحجر الرملي كما هي؛ النص بألوان القالب."
+
+msgid "plugins.generic.customErrorPages.style.navy.name"
+msgstr "كحلي"
+
+msgid "plugins.generic.customErrorPages.style.navy.desc"
+msgstr "تدرج كحلي داكن، نص أبيض."
+
+msgid "plugins.generic.customErrorPages.style.slate.name"
+msgstr "رمادي أردوازي"
+
+msgid "plugins.generic.customErrorPages.style.slate.desc"
+msgstr "تدرج رمادي أردوازي، نص أبيض."
+
+msgid "plugins.generic.customErrorPages.style.forest.name"
+msgstr "أخضر غابي"
+
+msgid "plugins.generic.customErrorPages.style.forest.desc"
+msgstr "تدرج أخضر داكن، نص أبيض."
+
+msgid "plugins.generic.customErrorPages.style.burgundy.name"
+msgstr "عنابي"
+
+msgid "plugins.generic.customErrorPages.style.burgundy.desc"
+msgstr "تدرج عنابي، نص أبيض."
+
+msgid "plugins.generic.customErrorPages.style.sand.name"
+msgstr "رملي"
+
+msgid "plugins.generic.customErrorPages.style.sand.desc"
+msgstr "لون رملي دافئ، نص داكن."
+
+msgid "plugins.generic.customErrorPages.style.dots.name"
+msgstr "منقّط"
+
+msgid "plugins.generic.customErrorPages.style.dots.desc"
+msgstr "رمادي فاتح بنمط نقاط خفيف، نص داكن."
+
+msgid "plugins.generic.customErrorPages.style.custom.name"
+msgstr "صورتك الخاصة"
+
+msgid "plugins.generic.customErrorPages.style.custom.desc"
+msgstr "صورتك (الرابط أدناه) والرسالة على بطاقة بيضاء."

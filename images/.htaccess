@@ -1,0 +1,8 @@
+# Long-lived browser/CDN cache for the error page background. The plugin
+# links it as 404-bg.<ext>?v=<mtime>, so replacing the file changes the URL.
+# Apache only (mod_headers); other servers need an equivalent rule.
+<IfModule mod_headers.c>
+	<FilesMatch "\.(webp|jpe?g|png)$">
+		Header set Cache-Control "public, max-age=31536000, immutable"
+	</FilesMatch>
+</IfModule>
