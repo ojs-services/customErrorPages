@@ -10,7 +10,7 @@ msgid "plugins.generic.customErrorPages.displayName"
 msgstr "Páginas de error personalizadas"
 
 msgid "plugins.generic.customErrorPages.description"
-msgstr "Muestra un 404 (Página no encontrada) con el estilo del tema en lugar del mensaje de error básico de OJS. Funciona con cualquier tema y OJS 3.3.0-x."
+msgstr "Muestra un 404 (Página no encontrada) con el estilo del tema en lugar del mensaje de error básico de OJS. Funciona con cualquier tema en OJS 3.4 y 3.5."
 
 msgid "plugins.generic.customErrorPages.404.title"
 msgstr "Página no encontrada"

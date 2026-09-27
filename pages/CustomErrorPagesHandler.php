@@ -1,6 +1,6 @@
 <?php
 /**
- * @file plugins/generic/customErrorPages/pages/CustomErrorPagesHandler.inc.php
+ * @file plugins/generic/customErrorPages/pages/CustomErrorPagesHandler.php
  *
  * Copyright (c) 2026 OJS Services. Distributed under the GNU GPL v3.
  * For full terms see the file LICENSE.
@@ -10,7 +10,13 @@
  * frontend header/footer, so the page matches the rest of the site.
  */
 
-import('classes.handler.Handler');
+namespace APP\plugins\generic\customErrorPages\pages;
+
+use APP\core\Application;
+use APP\handler\Handler;
+use APP\template\TemplateManager;
+use PKP\facades\Locale;
+use PKP\plugins\PluginRegistry;
 
 class CustomErrorPagesHandler extends Handler
 {
@@ -32,15 +38,6 @@ class CustomErrorPagesHandler extends Handler
 
     public function notFound($args, $request)
     {
-        // The surrounding theme header/footer use core string components
-        // ({translate key="user.login"}, "navigation.*", …). Plugin pages do
-        // not auto-load them, so load them now or the header prints ##keys##.
-        AppLocale::requireComponents(
-            LOCALE_COMPONENT_PKP_USER,
-            LOCALE_COMPONENT_PKP_COMMON,
-            LOCALE_COMPONENT_APP_COMMON
-        );
-
         // NB: we deliberately do NOT call $this->setupTemplate($request). On a
         // frontend error page it only adds backend/role data (userRoles, workflow
         // stages) that this page doesn't use, and it requires the handler to have
@@ -56,8 +53,9 @@ class CustomErrorPagesHandler extends Handler
             header('HTTP/1.1 404 Not Found');
             header('Cache-Control: no-store');
         }
+        self::_pinStatus(404);
         // display() re-sends Cache-Control from its own setting; pin it too.
-        $templateMgr->setCacheability(CACHEABILITY_NO_STORE);
+        $templateMgr->setCacheability(TemplateManager::CACHEABILITY_NO_STORE);
 
         $plugin = PluginRegistry::getPlugin('generic', 'customerrorpagesplugin');
 
@@ -97,17 +95,39 @@ class CustomErrorPagesHandler extends Handler
         $inline = $missing && ($request->getUserVar('inline') || $secFetchDest === 'iframe');
 
         if ($plugin && $inline) {
-            $locale = AppLocale::getLocale();
+            $locale = Locale::getLocale();
+            $meta = Locale::getMetadata($locale);
             $templateMgr->assign(array(
                 'customErrorLang' => str_replace('_', '-', $locale),
-                'customErrorDir'  => AppLocale::getLocaleDirection($locale) === 'rtl' ? 'rtl' : 'ltr',
+                'customErrorDir'  => ($meta && $meta->isRightToLeft()) ? 'rtl' : 'ltr',
             ));
             $templateMgr->display($plugin->getTemplateResource('frontend/notFoundInline.tpl'));
         } elseif ($plugin) {
             $templateMgr->display($plugin->getTemplateResource('frontend/notFound.tpl'));
         } else {
             // Extremely defensive: plugin vanished mid-request → fall back.
-            $request->getDispatcher()->handle404();
+            \APP\plugins\generic\customErrorPages\CustomErrorPagesPlugin::notFound();
+        }
+    }
+
+    /**
+     * OJS 3.5's TemplateManager::display() sends the session cookie with
+     * header('Set-Cookie: …', false, <status of Laravel's response>), and that
+     * status is 200 unless someone set it — so a first visit (a new session,
+     * which is every crawler) would get this page as a 200. Give Laravel's
+     * response the same status. OJS 3.4 registers no such response, so there
+     * is nothing to set.
+     */
+    private static function _pinStatus($code)
+    {
+        if (!function_exists('app')) return;
+        try {
+            $app = app();
+            if ($app->bound(\Illuminate\Http\Response::class)) {
+                $app->get(\Illuminate\Http\Response::class)->setStatusCode($code);
+            }
+        } catch (\Throwable $e) {
+            // Keep the status sent by header() above.
         }
     }
 }

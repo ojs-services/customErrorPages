@@ -3,19 +3,19 @@
 <!--
   * plugins/generic/customErrorPages/version.xml
   *
-  * Custom Error Pages — generic plugin for OJS 3.3.0-x.
+  * Custom Error Pages — generic plugin for OJS 3.4 and 3.5.
   * Renders a "page not found" (404) using the ACTIVE theme's header/footer,
   * so the error page looks like the rest of the site on ANY theme.
   -->
 <version>
 	<application>customErrorPages</application>
 	<type>plugins.generic</type>
-	<release>1.5.0.0</release>
-	<date>2026-09-26</date>
+	<release>3.0.0.2</release>
+	<date>2026-09-27</date>
 	<lazy-load>1</lazy-load>
 	<!--
 	  sitewide=1 makes OJS LOAD the plugin on site-scope requests too (the site
-	  home, and any URL whose journal path does not exist). Without it,
+	  home and its pages, /index.php/index/...). Without it,
 	  getEnabledProducts() falls back to context 0 and our per-journal "enabled"
 	  rows are invisible, so those URLs would stay bare 404s. It does NOT make
 	  this a site plugin: isSitePlugin() is still false, so each journal keeps
@@ -23,10 +23,10 @@
 	-->
 	<sitewide>1</sitewide>
 	<class>CustomErrorPagesPlugin</class>
-	<summary locale="en_US">Custom Error Pages</summary>
-	<summary locale="tr_TR">Özel Hata Sayfaları</summary>
-	<description locale="en_US">Renders a friendly, theme-styled 404 (Page not found) instead of OJS's bare error message. Works with any theme on OJS 3.3.0-x — no core changes.</description>
-	<description locale="tr_TR">OJS'nin çıplak hata mesajı yerine, temayla uyumlu dostane bir 404 (Sayfa bulunamadı) sayfası gösterir. Her temayla, OJS 3.3.0-x üzerinde çalışır; çekirdeğe dokunmaz.</description>
+	<summary locale="en">Custom Error Pages</summary>
+	<summary locale="tr">Özel Hata Sayfaları</summary>
+	<description locale="en">Renders a friendly, theme-styled 404 (Page not found) instead of OJS's bare error message. Works with any theme on OJS 3.4 and 3.5 — no core changes.</description>
+	<description locale="tr">OJS'nin çıplak hata mesajı yerine, temayla uyumlu dostane bir 404 (Sayfa bulunamadı) sayfası gösterir. Her temayla, OJS 3.4 ve 3.5 üzerinde çalışır; çekirdeğe dokunmaz.</description>
 	<maintainer>
 		<name>OJS Services</name>
 		<email>info@ojs-services.com</email>

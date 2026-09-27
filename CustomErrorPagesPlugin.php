@@ -1,11 +1,12 @@
 <?php
 /**
- * @file plugins/generic/customErrorPages/CustomErrorPagesPlugin.inc.php
+ * @file plugins/generic/customErrorPages/CustomErrorPagesPlugin.php
  *
  * Copyright (c) 2026 OJS Services. Distributed under the GNU GPL v3.
  * For full terms see the file LICENSE.
  *
- * Custom Error Pages — generic plugin for OJS 3.3.
+ * Custom Error Pages — generic plugin for OJS 3.4 and 3.5 (one codebase;
+ * where the two differ, the code checks what the running OJS offers).
  *
  * OJS renders "page not found" via Dispatcher::handle404() → fatalError(),
  * which prints a bare "<h1>404 Not Found</h1>" and dies, bypassing the theme
@@ -15,12 +16,25 @@
  * header/footer — so the error page matches the rest of the site on any theme.
  */
 
-import('lib.pkp.classes.plugins.GenericPlugin');
+namespace APP\plugins\generic\customErrorPages;
+
+use APP\core\Application;
+use APP\core\Services;
+use APP\facades\Repo;
+use PKP\config\Config;
+use PKP\core\JSONMessage;
+use PKP\core\PKPPageRouter;
+use PKP\db\DAORegistry;
+use PKP\linkAction\LinkAction;
+use PKP\linkAction\request\AjaxModal;
+use PKP\plugins\GenericPlugin;
+use PKP\plugins\Hook;
+use PKP\submission\PKPSubmission;
 
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '1.5.0.0';
+    const PLUGIN_VERSION = '3.0.0.2';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';
@@ -58,14 +72,13 @@ class CustomErrorPagesPlugin extends GenericPlugin
         if ($success) $this->_checkInstallStamp();
 
         $enabled = $success && $this->getEnabled($mainContextId);
-        // Site-scope requests — the site home, and any URL whose journal path
-        // does not exist (/index.php/nosuchjournal, which the router 404s before
-        // it ever reaches a handler) — carry NO journal context, so getEnabled()
-        // looks at the site scope (context 0) and says "off" even when every
-        // journal has us switched on. Those were the last bare 404s left, so
-        // fall back to "enabled for at least one journal" when there is no
-        // journal context. (Generic plugins load in Dispatcher::dispatch(),
-        // BEFORE the router's early 404 — so the shutdown net still catches it.)
+        // Site-scope requests (the site home and its pages, /index.php/index/…)
+        // carry NO journal context, so getEnabled() looks at the site scope and
+        // says "off" even when every journal has us switched on. Fall back to
+        // "enabled for at least one journal" when there is no journal context.
+        // (A URL whose journal path does not exist never reaches us on OJS 3.4+:
+        // finding the enabled generic plugins resolves the journal first, and an
+        // unknown path is a 404 right there — before any generic plugin loads.)
         if ($success && !$enabled && !$this->getCurrentContextId()) {
             $enabled = $this->_enabledForAnyContext();
         }
@@ -75,7 +88,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
             $this->addLocaleData();
             // Run LAST: only claim a request that no real handler — core,
             // app, lib or another plugin — has taken. See loadHandler().
-            HookRegistry::register('LoadHandler', array($this, 'loadHandler'), HOOK_SEQUENCE_LAST);
+            Hook::add('LoadHandler', array($this, 'loadHandler'), Hook::SEQUENCE_LAST);
 
             $this->_installNet();
         }
@@ -119,13 +132,13 @@ class CustomErrorPagesPlugin extends GenericPlugin
         // fpassthru()s the file, which PHP hands to the output layer as ONE
         // write, so any open buffer would swallow the whole file. Both download
         // paths fire a hook before sending their first header — drop out there.
-        HookRegistry::register('File::download', array($this, 'releaseBufferForDownload'));
-        HookRegistry::register('FileManager::downloadFile', array($this, 'releaseBufferForDownload'));
+        Hook::add('File::download', array($this, 'releaseBufferForDownload'));
+        Hook::add('FileManager::downloadFile', array($this, 'releaseBufferForDownload'));
 
         // Normal sequence: runs before htmlArticleGalley's LATE callback, which
         // takes the download over before the core's own disk check and throws
         // on a missing file (a 500, not a 404).
-        HookRegistry::register('ArticleHandler::download', array($this, 'checkArticleFileOnDisk'));
+        Hook::add('ArticleHandler::download', array($this, 'checkArticleFileOnDisk'));
     }
 
     /**
@@ -140,10 +153,10 @@ class CustomErrorPagesPlugin extends GenericPlugin
     {
         $fileId = $args[2];
         if (!$fileId) return false;
-        $submissionFile = Services::get('submissionFile')->get($fileId);
+        $submissionFile = Repo::submissionFile()->get((int) $fileId);
         if (!$submissionFile) return false;
         if (!Services::get('file')->fs->has($submissionFile->getData('path'))) {
-            Application::get()->getRequest()->getDispatcher()->handle404();   // does not return
+            self::notFound();   // does not return
         }
         return false;
     }
@@ -165,7 +178,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
             $request = Application::get()->getRequest();
             if ($request->getRequestedPage() === 'issue' && $request->getRequestedOp() === 'download') {
                 self::$_issueFileMissing = true;
-                $request->getDispatcher()->handle404();   // does not return
+                self::notFound();   // does not return
             }
         }
 
@@ -189,13 +202,13 @@ class CustomErrorPagesPlugin extends GenericPlugin
         self::$_stampChecked = true;
         if (!Config::getVar('general', 'installed')) return;
         $release = self::PLUGIN_VERSION;
-        if ($this->getSetting(CONTEXT_SITE, 'schemaStamp') === $release) return;
+        if ($this->getSetting(self::siteId(), 'schemaStamp') === $release) return;
         try {
             $this->_healSitewide();
-            if ($this->getSetting(CONTEXT_SITE, 'enabledAnywhere') === null) {
+            if ($this->getSetting(self::siteId(), 'enabledAnywhere') === null) {
                 $this->_recomputeEnabledAnywhere();
             }
-            $this->updateSetting(CONTEXT_SITE, 'schemaStamp', $release, 'string');
+            $this->updateSetting(self::siteId(), 'schemaStamp', $release, 'string');
         } catch (\Throwable $e) {
             // Never let a repair break a request; the next one retries.
         }
@@ -216,14 +229,14 @@ class CustomErrorPagesPlugin extends GenericPlugin
         $versionDao = DAORegistry::getDAO('VersionDAO'); /* @var $versionDao VersionDAO */
         $productType = 'plugins.' . $this->getCategory();
         $product = basename($this->getPluginPath());
-        $current = $versionDao->getCurrentVersion($productType, $product, true);
+        $current = $versionDao->getCurrentVersion($productType, $product);
         if (!$current || $current->getSitewide()) return;
         // insertVersion() compares with the most recently installed row; only
         // when that is this very row does it UPDATE instead of inserting.
         $history = $versionDao->getVersionHistory($productType, $product);
         $latest = array_shift($history);
         if (!$latest || $latest->compare($current) != 0) return;
-        $current->setSitewide(1);
+        $current->setSitewide(true);
         $versionDao->insertVersion($current, true);
     }
 
@@ -236,7 +249,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
      */
     private function _enabledForAnyContext()
     {
-        $cached = $this->getSetting(CONTEXT_SITE, 'enabledAnywhere');
+        $cached = $this->getSetting(self::siteId(), 'enabledAnywhere');
         if ($cached !== null) return (bool) $cached;
         try {
             return $this->_recomputeEnabledAnywhere();
@@ -269,7 +282,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
     private function _recomputeEnabledAnywhere()
     {
         $any = $this->_scanEnabledContexts();
-        $this->updateSetting(CONTEXT_SITE, 'enabledAnywhere', $any, 'bool');
+        $this->updateSetting(self::siteId(), 'enabledAnywhere', $any, 'bool');
         return $any;
     }
 
@@ -298,7 +311,6 @@ class CustomErrorPagesPlugin extends GenericPlugin
     {
         $actions = parent::getActions($request, $actionArgs);
         if (!$this->getEnabled()) return $actions;
-        import('lib.pkp.classes.linkAction.request.AjaxModal');
         $router = $request->getRouter();
         array_unshift($actions, new LinkAction(
             'settings',
@@ -318,8 +330,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
     {
         if ($request->getUserVar('verb') === 'settings') {
             $context = $request->getContext();
-            $contextId = $context ? $context->getId() : CONTEXT_SITE;
-            $this->import('CustomErrorPagesSettingsForm');
+            $contextId = $context ? $context->getId() : self::siteId();
             $form = new CustomErrorPagesSettingsForm($this, $contextId);
             if ($request->getUserVar('save')) {
                 $form->readInputData();
@@ -382,7 +393,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
     public function resolveStyle($request)
     {
         $context = $request->getContext();
-        $contextId = $context ? $context->getId() : CONTEXT_SITE;
+        $contextId = $context ? $context->getId() : self::siteId();
         $id = $this->getStyleId($contextId);
         $def = self::STYLES[$id];
         $css = '';
@@ -445,8 +456,8 @@ class CustomErrorPagesPlugin extends GenericPlugin
             $handler = $router->getHandler();
             $op = $request->getRequestedOp();
 
-            if (self::$_issueFileMissing && is_a($handler, 'IssueHandler')) {
-                $issue = $handler->getAuthorizedContextObject(ASSOC_TYPE_ISSUE);
+            if (self::$_issueFileMissing && $handler instanceof \APP\pages\issue\IssueHandler) {
+                $issue = $handler->getAuthorizedContextObject(Application::ASSOC_TYPE_ISSUE);
                 if (!$issue) return null;
                 return array(
                     'type' => 'issue',
@@ -454,12 +465,11 @@ class CustomErrorPagesPlugin extends GenericPlugin
                 );
             }
 
-            if (!is_a($handler, 'ArticleHandler') || !in_array($op, array('view', 'download'), true)) return null;
-            if (!defined('STATUS_PUBLISHED')) return null;
+            if (!($handler instanceof \APP\pages\article\ArticleHandler) || !in_array($op, array('view', 'download'), true)) return null;
             $article = $handler->article;
             $publication = $handler->publication;
-            if (!$article || (int) $article->getData('status') !== STATUS_PUBLISHED) return null;
-            if (!$publication || (int) $publication->getData('status') !== STATUS_PUBLISHED) return null;
+            if (!$article || (int) $article->getData('status') !== PKPSubmission::STATUS_PUBLISHED) return null;
+            if (!$publication || (int) $publication->getData('status') !== PKPSubmission::STATUS_PUBLISHED) return null;
             if (!$handler->galley && !$this->_galleyRequested($request->getRequestedArgs())) return null;
             return array(
                 'type' => 'article',
@@ -508,76 +518,110 @@ class CustomErrorPagesPlugin extends GenericPlugin
     }
 
     /**
-     * LoadHandler callback. $args = array(&$page, &$op, &$sourceFile).
+     * LoadHandler callback. $args = array(&$page, &$op, &$sourceFile, &$handler).
      *
-     * A request reaches handle404() when PKPPageRouter finds no handler file
-     * for $page (pages/<page>/index.php, in the app or in lib/pkp). We mirror
-     * that same existence check: if a real handler exists, or this is the
-     * empty/index page, we bow out (return false) and OJS proceeds normally.
-     * Only when nothing would handle the page do we mount our 404 handler.
+     * A request reaches a bare 404 when PKPPageRouter finds no handler for
+     * $page/$op. We mirror the router's own check: load the page's index.php
+     * exactly as route() will, and bow out (return false, or hand back the
+     * handler it produced) whenever a real handler serves this op. Only when
+     * nothing would, do we mount our 404 handler.
+     *
+     * OJS 3.5 page files return the handler object; OJS 3.4 page files mostly
+     * still define HANDLER_CLASS (deprecated there, rejected by 3.5). Both are
+     * handled; the router accepts a handler object set here in either version.
      */
     public function loadHandler($hookName, $args)
     {
         $page       =& $args[0];
         $op         =& $args[1];
         $sourceFile =& $args[2];
+        $handler    =& $args[3];
 
         // Another LoadHandler (StaticPages, EditorialBoard, …) already claimed
         // this request → bow out.
-        if (defined('HANDLER_CLASS')) return false;
+        if ($handler || defined('HANDLER_CLASS')) return false;
         // Index / empty page → OJS' own default page, never a 404.
         if (empty($page)) return false;
+        // OJS 3.5 switches the language in the router itself: after this hook,
+        // PKPPageRouter::route() acts on any op named 'setLocale'. It is not a
+        // handler method there (it is in OJS 3.4), so it is never an unknown op.
+        if ($op === 'setLocale') return false;
 
         // A real page + op whose target simply DOES NOT EXIST. OJS runs these
-        // through an authorization policy instead of handle404(), so a bad issue
-        // id bounces the visitor to the login page (or to authorizationDenied
-        // once logged in) rather than saying "not found". Catch that here, while
-        // we can still answer with a proper 404. See _missingObject().
+        // through an authorization policy instead of a 404, so a bad issue id
+        // bounces the visitor to the login page rather than saying "not found".
+        // Catch that here, while we can still answer with a proper 404.
         if ($this->_missingObject($page, $op)) {
-            return $this->_mountNotFound($op, $args);
+            return $this->_mountNotFound($op, $handler);
         }
 
-        // Load the page's index.php EXACTLY as PKPPageRouter::route() will (app
-        // first, then lib/pkp). This runs its switch($op) — including nested lib
-        // fallbacks — which defines HANDLER_CLASS *only if the op resolves to a
-        // real handler*. We let the core's own routing decide; we never guess.
-        // ($op is already defaulted to 'index' by getRequestedOp for empty ops,
-        // so the switch sees the same value the core would.)
-        if (file_exists($sourceFile)) {
-            require_once('./' . $sourceFile);
-        } elseif (file_exists(PKP_LIB_PATH . DIRECTORY_SEPARATOR . $sourceFile)) {
-            require_once('.' . DIRECTORY_SEPARATOR . PKP_LIB_PATH . DIRECTORY_SEPARATOR . $sourceFile);
+        // Load the page's index.php exactly as PKPPageRouter::route() will (app
+        // first, then lib/pkp). Its switch($op) yields a handler only when the
+        // op is real. We let the core's own routing decide; we never guess.
+        //
+        // A page file runs in the scope that loads it and may use the router's
+        // variables: OJS 3.5's pages/gateway/index.php builds its handler with
+        // $request. It gets the same variable here. If loading a page file
+        // fails anyway, we step aside and the core routes the request as it
+        // always does: a real page must never break because of this plugin.
+        $request = Application::get()->getRequest();
+        try {
+            if (file_exists($sourceFile)) {
+                $result = require('./' . $sourceFile);
+            } elseif (file_exists(PKP_LIB_PATH . '/' . $sourceFile)) {
+                $result = require('./' . PKP_LIB_PATH . '/' . $sourceFile);
+            } else {
+                return $this->_mountNotFound($op, $handler);  // no such page at all
+            }
+        } catch (\Throwable $e) {
+            return false;
         }
 
-        // A real handler resolved for this page+op → hand back to the core.
-        // Returning true means "handler loaded"; the core does NOT require the
-        // file again and runs it as normal. A valid page/op is therefore never
-        // intercepted — this is structurally the core's own criterion.
-        if (defined('HANDLER_CLASS')) return true;
+        // A real handler for this op → hand it to the core untouched.
+        if (is_object($result) && in_array($op, get_class_methods($result))) {
+            $handler = $result;
+            return true;
+        }
+        if (defined('HANDLER_CLASS') && in_array($op, get_class_methods(HANDLER_CLASS))) {
+            return true;                                        // the core instantiates it
+        }
 
-        // Nothing resolved: an UNKNOWN page, OR a known page whose switch($op)
-        // matched no case (a mistyped op like /about/editorailTeam). Either way
-        // OJS would bare-404 it. Mount our themed 404 handler; the core
-        // instantiates it AFTER its own session init, so nothing is rendered here
-        // (no re-entrancy).
-        return $this->_mountNotFound($op, $args);
+        // Nothing resolved: an unknown op on a known page (a mistyped
+        // /about/editorailTeam). OJS would bare-404 it — answer with ours.
+        return $this->_mountNotFound($op, $handler);
     }
 
     /**
      * Mount our 404 handler for this request. Nothing is rendered here — the
-     * core instantiates the handler after its own session init (rendering
-     * inside the hook would re-enter routing).
-     * @param $op string   bound by reference from the hook args
-     * @param $args array  the hook's arg list ($args[2] is the source file)
+     * core runs the handler after its own session init (rendering inside the
+     * hook would re-enter routing).
      */
-    private function _mountNotFound(&$op, &$args)
+    private function _mountNotFound(&$op, &$handler)
     {
-        $handlerFile = $this->getPluginPath() . '/pages/CustomErrorPagesHandler.inc.php';
-        require_once($handlerFile);
-        if (!defined('HANDLER_CLASS')) define('HANDLER_CLASS', 'CustomErrorPagesHandler');
+        $handler = new \APP\plugins\generic\customErrorPages\pages\CustomErrorPagesHandler();
         $op = 'notFound';
-        $args[2] = $handlerFile;
         return true;
+    }
+
+    /**
+     * Answer "404 Not Found" the way the running OJS does: OJS 3.4 has
+     * Dispatcher::handle404(), OJS 3.5 throws NotFoundHttpException (which
+     * PKPApplication::execute() turns into the same bare 404 body). Either way
+     * the shutdown net below then themes it. Does not return.
+     */
+    public static function notFound()
+    {
+        $dispatcher = Application::get()->getRequest()->getDispatcher();
+        if (method_exists($dispatcher, 'handle404')) {
+            $dispatcher->handle404();
+        }
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+    }
+
+    /** Site-level context id: 0 in OJS 3.4, null in OJS 3.5 (Application::SITE_CONTEXT_ID). */
+    public static function siteId()
+    {
+        return defined(\PKP\core\PKPApplication::class . '::SITE_CONTEXT_ID') ? \PKP\core\PKPApplication::SITE_CONTEXT_ID : 0;
     }
 
     /**
@@ -606,9 +650,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
         if ($issueId === null || $issueId === '' || $issueId === 'current') return false;
 
         try {
-            $issueDao = DAORegistry::getDAO('IssueDAO');
-            $issue = $issueDao->getByBestId($issueId, $context->getId());
-            return !is_a($issue, 'Issue');
+            return !Repo::issue()->getByBestId((string) $issueId, (int) $context->getId());
         } catch (\Throwable $e) {
             return false;   // never break routing over this check
         }
@@ -634,9 +676,9 @@ class CustomErrorPagesPlugin extends GenericPlugin
         if (trim((string) $body) !== self::BARE_404_BODY) return; // only OJS' bare 404
         $request = Application::get()->getRequest();
         if (!$request) return;
-        // NB: a journal context is NOT required. Without one (site home, or an
-        // unknown journal path) the page renders in the SITE's theme, which is
-        // exactly what those URLs should look like.
+        // NB: a journal context is NOT required. Without one (the site home and
+        // its pages) the page renders in the SITE's theme, which is exactly what
+        // those URLs should look like.
         // PHP resets cwd before shutdown functions; restore the OJS root so the
         // theme header's relative file reads (menus, plugin head XML) resolve.
         if (!empty(self::$_rootDir)) @chdir(self::$_rootDir);
@@ -646,8 +688,7 @@ class CustomErrorPagesPlugin extends GenericPlugin
             // Render into its own buffer and emit only once it completed, so a
             // failure half-way through can never leave a truncated page.
             ob_start();
-            require_once($this->getPluginPath() . '/pages/CustomErrorPagesHandler.inc.php');
-            $handler = new CustomErrorPagesHandler();
+            $handler = new \APP\plugins\generic\customErrorPages\pages\CustomErrorPagesHandler();
             $handler->notFound(array(), $request);            // render the themed page
             $page = ob_get_clean();
             if (trim((string) $page) === '') { echo $body; return; }

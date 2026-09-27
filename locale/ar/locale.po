@@ -10,7 +10,7 @@ msgid "plugins.generic.customErrorPages.displayName"
 msgstr "صفحات خطأ مخصّصة"
 
 msgid "plugins.generic.customErrorPages.description"
-msgstr "تعرض صفحة 404 (الصفحة غير موجودة) بنمط السمة بدلاً من رسالة الخطأ الأساسية في OJS. تعمل مع أي سمة وأي إصدار من OJS 3.3.0-x."
+msgstr "تعرض صفحة 404 (الصفحة غير موجودة) بنمط السمة بدلاً من رسالة الخطأ الأساسية في OJS. تعمل مع أي سمة على OJS 3.4 و3.5."
 
 msgid "plugins.generic.customErrorPages.404.title"
 msgstr "الصفحة غير موجودة"

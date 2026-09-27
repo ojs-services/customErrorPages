@@ -1,6 +1,6 @@
 <?php
 /**
- * @file plugins/generic/customErrorPages/CustomErrorPagesSettingsForm.inc.php
+ * @file plugins/generic/customErrorPages/CustomErrorPagesSettingsForm.php
  *
  * Copyright (c) 2026 OJS Services. Distributed under the GNU GPL v3.
  * For full terms see the file LICENSE.
@@ -9,7 +9,16 @@
  * list of styles (CustomErrorPagesPlugin::STYLES), plus an optional image URL
  * for the "your own image" style.
  */
-import('lib.pkp.classes.form.Form');
+namespace APP\plugins\generic\customErrorPages;
+
+use APP\template\TemplateManager;
+use PKP\form\Form;
+use PKP\form\validation\FormValidator;
+use PKP\form\validation\FormValidatorCSRF;
+use PKP\form\validation\FormValidatorCustom;
+use PKP\form\validation\FormValidatorInSet;
+use PKP\form\validation\FormValidatorPost;
+use PKP\form\validation\FormValidatorUrl;
 
 class CustomErrorPagesSettingsForm extends Form
 {
@@ -21,25 +30,25 @@ class CustomErrorPagesSettingsForm extends Form
     public function __construct($plugin, $contextId)
     {
         $this->_plugin = $plugin;
-        $this->_contextId = (int) $contextId;
+        $this->_contextId = $contextId === null ? null : (int) $contextId;   // null = site (OJS 3.5)
         parent::__construct($plugin->getTemplateResource('settingsForm.tpl'));
 
         $prefix = 'plugins.generic.customErrorPages.settings.';
-        $this->addCheck(new FormValidatorInSet($this, 'style', FORM_VALIDATOR_REQUIRED_VALUE, $prefix . 'style.invalid', array_keys(CustomErrorPagesPlugin::STYLES)));
+        $this->addCheck(new FormValidatorInSet($this, 'style', FormValidator::FORM_VALIDATOR_REQUIRED_VALUE, $prefix . 'style.invalid', array_keys(CustomErrorPagesPlugin::STYLES)));
 
         // The URL ends up inside style="background-image:url('…')": beyond being
         // a valid URL it must be http(s), fit in 255 bytes and carry none of the
         // characters that could break out of that CSS (see isSafeBackgroundUrl).
         $invalid = $prefix . 'backgroundImageUrl.invalid';
-        $this->addCheck(new FormValidatorUrl($this, 'backgroundImageUrl', FORM_VALIDATOR_OPTIONAL_VALUE, $invalid));
+        $this->addCheck(new FormValidatorUrl($this, 'backgroundImageUrl', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, $invalid));
         $this->addCheck(new FormValidatorCustom(
-            $this, 'backgroundImageUrl', FORM_VALIDATOR_OPTIONAL_VALUE, $invalid,
-            array('CustomErrorPagesPlugin', 'isSafeBackgroundUrl')
+            $this, 'backgroundImageUrl', FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE, $invalid,
+            array(CustomErrorPagesPlugin::class, 'isSafeBackgroundUrl')
         ));
         // "Your own image" needs an image.
         $form = $this;
         $this->addCheck(new FormValidatorCustom(
-            $this, 'style', FORM_VALIDATOR_REQUIRED_VALUE, $prefix . 'backgroundImageUrl.required',
+            $this, 'style', FormValidator::FORM_VALIDATOR_REQUIRED_VALUE, $prefix . 'backgroundImageUrl.required',
             function ($style) use ($form) {
                 return $style !== 'custom' || trim((string) $form->getData('backgroundImageUrl')) !== '';
             }

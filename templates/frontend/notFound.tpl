@@ -49,6 +49,12 @@
 .error-hero.cep-on-light .error-msg{ color:#424a53; opacity:1; }
 .error-hero.cep-card .error-card{ background:#fff; color:#1f2328; border-radius:12px; padding:2.75rem 2rem; box-shadow:0 12px 32px rgba(0,0,0,.2); }
 .error-hero.cep-card .error-title{ color:#1f2328; }
+/* The looks without a card put the text straight on their background. A theme
+   that draws its own card (Pampas: a white card on the right) must not keep it
+   there — white text on a white card is invisible — so drop it and centre. */
+.error-hero.cep-colour:not(.cep-card) .error-hero-inner, .error-hero.cep-image:not(.cep-card) .error-hero-inner{ justify-content:center; }
+.error-hero.cep-colour:not(.cep-card) .error-card, .error-hero.cep-image:not(.cep-card) .error-card{ background:none; border:0; box-shadow:none; text-align:center; }
+.error-hero.cep-colour:not(.cep-card) .error-msg, .error-hero.cep-image:not(.cep-card) .error-msg{ margin-left:auto; margin-right:auto; }
 </style>
 
 {include file="frontend/components/footer.tpl"}

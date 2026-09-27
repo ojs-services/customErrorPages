@@ -10,7 +10,7 @@ msgid "plugins.generic.customErrorPages.displayName"
 msgstr "Пользовательские страницы ошибок"
 
 msgid "plugins.generic.customErrorPages.description"
-msgstr "Показывает дружелюбную страницу 404 (Страница не найдена) в стиле темы вместо простого сообщения об ошибке OJS. Работает с любой темой и OJS 3.3.0-x."
+msgstr "Показывает дружелюбную страницу 404 (Страница не найдена) в стиле темы вместо простого сообщения об ошибке OJS. Работает с любой темой в OJS 3.4 и 3.5."
 
 msgid "plugins.generic.customErrorPages.404.title"
 msgstr "Страница не найдена"
