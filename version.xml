@@ -10,8 +10,8 @@
 <version>
 	<application>customErrorPages</application>
 	<type>plugins.generic</type>
-	<release>1.5.0.0</release>
-	<date>2026-09-26</date>
+	<release>3.0.0.2</release>
+	<date>2026-09-27</date>
 	<lazy-load>1</lazy-load>
 	<!--
 	  sitewide=1 makes OJS LOAD the plugin on site-scope requests too (the site

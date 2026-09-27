@@ -20,7 +20,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '1.5.0.0';
+    const PLUGIN_VERSION = '3.0.0.2';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';

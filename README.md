@@ -24,7 +24,7 @@ The same styles in a custom theme:
 
 ## Installation
 
-1. Download `customErrorPages-<version>.tar.gz` from [Releases](../../releases).
+1. Download `customErrorPages-ojs3.3-<version>.tar.gz` from [Releases](../../releases). (For OJS 3.4 and 3.5, use the `-ojs3.4-` or `-ojs3.5-` package of the same version.)
 2. In OJS, go to *Settings → Website → Plugins → Upload a new plugin* and choose the file.
 3. Enable **Custom Error Pages** in each journal where you want it.
 4. Optional: open *Custom Error Pages → Settings* and pick a style.

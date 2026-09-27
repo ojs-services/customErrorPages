@@ -70,7 +70,7 @@ if grep -rnE "$SYNTAX" "$P" --include='*.php'; then fail "PHP 7.4+ syntax (see a
 echo "ok   no PHP 7.4+ syntax"
 
 # --- package -----------------------------------------------------------------
-PKG="$NAME-$(echo "$REL" | tr . _).tar.gz"
+PKG="$NAME-ojs3.3-$REL.tar.gz"
 case "$(realpath -m "$OUT_DIR")/" in "$REPO/"*) fail "OUT_DIR is inside the repository; tarballs are never committed";; esac
 mkdir -p "$OUT_DIR"
 ( cd "$STAGE" && tar --format=ustar -czf "$PKG" "$NAME" )
