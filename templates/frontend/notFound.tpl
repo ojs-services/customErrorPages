@@ -48,7 +48,9 @@
 .error-hero.cep-on-light .error-title{ color:#1f2328; }
 .error-hero.cep-on-light .error-msg{ color:#424a53; opacity:1; }
 .error-hero.cep-card .error-card{ background:#fff; color:#1f2328; border-radius:12px; padding:2.75rem 2rem; box-shadow:0 12px 32px rgba(0,0,0,.2); }
-.error-hero.cep-card .error-title{ color:#1f2328; }
+/* Dark title on the card by default. The selector is short on purpose, so a
+   theme that sets its own title colour here (body.<theme> .error-title) wins. */
+.cep-card .error-title{ color:#1f2328; }
 /* The looks without a card put the text straight on their background. A theme
    that draws its own card (Pampas: a white card on the right) must not keep it
    there — white text on a white card is invisible — so drop it and centre. */
