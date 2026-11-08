@@ -1,5 +1,10 @@
 # Changelog — Custom Error Pages
 
+## 3.0.0.3 — 2026-11-08 (OJS 3.3)
+- Fixed: if this package is installed on OJS 3.4 or 3.5 by mistake, the plugin stays off and the site keeps working.
+- Version numbers: the OJS 3.3 package stays on 3.0.0.x, the OJS 3.4–3.5 package moves to 4.x, so the two can no longer be mixed up.
+- Card styles: a theme that sets its own colour for the error page title now keeps it.
+
 ## 3.0.0.2 — 2026-09-27
 - No change for OJS 3.3. This release fixes the language menu and the RSS and Atom feeds on OJS 3.5; the OJS 3.3 package gets the same number so that every OJS series stays on one version. Sites on 3.0.0.1 can upgrade or stay; both behave the same.
 

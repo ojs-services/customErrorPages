@@ -75,6 +75,7 @@ case "$(realpath -m "$OUT_DIR")/" in "$REPO/"*) fail "OUT_DIR is inside the repo
 mkdir -p "$OUT_DIR"
 ( cd "$STAGE" && tar --format=ustar -czf "$PKG" "$NAME" )
 mv "$STAGE/$PKG" "$OUT_DIR/$PKG"
+gzip -t "$OUT_DIR/$PKG" || fail "gzip -t $PKG"
 echo "ok   $(tar -tzf "$OUT_DIR/$PKG" | wc -l) entries, top dir $(tar -tzf "$OUT_DIR/$PKG" | head -1)"
 echo
 echo "package: $OUT_DIR/$PKG"
