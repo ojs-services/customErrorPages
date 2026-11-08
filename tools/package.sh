@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Build the release package for Custom Error Pages and run the release checks.
 #
-# Usage:  tools/package.sh [git-ref] [series ...]   (default: HEAD, series 3.4 3.5)
-#         One package per series, same content: this branch is the code for OJS 3.4 and 3.5.
+# Usage:  tools/package.sh [git-ref]   (default: HEAD)
+#         One package for OJS 3.4 and 3.5: customErrorPages-ojs3.4-3.5-<version>.tar.gz.
 # Env:    OUT_DIR   where to write the package (default: the repository's parent directory)
 #         PHP_BINS  space-separated PHP interpreters for `php -l` (default: php)
 #
@@ -12,7 +12,7 @@ set -euo pipefail
 
 REF="${1:-HEAD}"
 [ $# -gt 0 ] && shift
-SERIES_LIST="${*:-3.4 3.5}"
+SERIES_LIST="3.4-3.5"
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 NAME="customErrorPages"
 OUT_DIR="${OUT_DIR:-$(dirname "$REPO")}"
@@ -20,7 +20,6 @@ PHP_BINS="${PHP_BINS:-php}"
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
-for s in $SERIES_LIST; do case "$s" in 3.4|3.5) ;; *) fail "unknown series $s (this branch builds OJS 3.4 and 3.5)";; esac; done
 
 # --- stage the ref -----------------------------------------------------------
 git -C "$REPO" rev-parse --verify --quiet "$REF^{commit}" >/dev/null || fail "unknown ref $REF"
@@ -73,7 +72,8 @@ echo "ok   no leaks"
 # that became class constants. Class-qualified uses (Foo::ASSOC_TYPE_ISSUE) pass.
 [ -z "$(find "$P" -name '*.inc.php')" ] || fail "*.inc.php file shipped (OJS 3.3 naming)"
 LEGACY="\\bimport\\(['\"]|HookRegistry::|AppLocale::|(^|[^:A-Za-z_])(CONTEXT_SITE|CONTEXT_ID_NONE|ASSOC_TYPE_[A-Z_]+|STATUS_PUBLISHED|FORM_VALIDATOR_[A-Z_]+|CACHEABILITY_[A-Z_]+)\\b"
-if grep -rnE "$LEGACY" "$P" --include='*.php'; then fail "OJS 3.3 leftover (see above)"; fi
+# index.php is exempt: its OJS 3.3 branch (the wrong-line placeholder) must use import().
+if grep -rnE "$LEGACY" "$P" --include='*.php' --exclude=index.php; then fail "OJS 3.3 leftover (see above)"; fi
 grep -q '^namespace APP\\plugins\\generic\\customErrorPages' "$P/CustomErrorPagesPlugin.php" || fail "plugin class is not namespaced"
 # PHP 8.1+ only functions (OJS 3.4 runs on PHP 8.0; php -l does not catch these)
 if grep -rnE '\barray_is_list\s*\(|\benum_exists\s*\(|\bfsync\s*\(' "$P" --include='*.php'; then fail "PHP 8.1+ function (see above)"; fi
@@ -86,6 +86,7 @@ for SERIES in $SERIES_LIST; do
     PKG="$NAME-ojs$SERIES-$REL.tar.gz"
     ( cd "$STAGE" && tar --format=ustar -czf "$PKG" "$NAME" )
     mv "$STAGE/$PKG" "$OUT_DIR/$PKG"
+    gzip -t "$OUT_DIR/$PKG" || fail "gzip -t $PKG"
     echo "ok   $PKG: $(tar -tzf "$OUT_DIR/$PKG" | wc -l) entries, top dir $(tar -tzf "$OUT_DIR/$PKG" | head -1)"
     echo "package: $OUT_DIR/$PKG"
     (cd "$OUT_DIR" && sha1sum "$PKG" && sha256sum "$PKG")

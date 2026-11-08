@@ -1,5 +1,10 @@
 # Changelog — Custom Error Pages
 
+## 4.0.0.0 — 2026-11-08 (OJS 3.4–3.5)
+- Fixed: if this package is installed on OJS 3.3 by mistake, it no longer breaks the site or its command-line tools. The plugin list shows it as the wrong package; install the OJS 3.3 package there.
+- Version numbers: the OJS 3.4–3.5 package moves to 4.x and the OJS 3.3 package stays on 3.0.0.x, so the two can no longer be mixed up. One package now serves OJS 3.4 and 3.5: `customErrorPages-ojs3.4-3.5-4.0.0.0.tar.gz`. Upgrading from 3.0.0.2 works as usual.
+- Card styles: a theme that sets its own colour for the error page title now keeps it.
+
 ## 3.0.0.2 — 2026-09-27
 - Fixed (OJS 3.5): with the plugin enabled, the language menu led to a "page not found" error on every multilingual site, and the language did not change. OJS 3.5 changes the language in its router, not in a page handler, and the plugin took the language link for a page that does not exist. The plugin now leaves these links to OJS.
 - Fixed (OJS 3.5): with the plugin enabled, the journal's RSS and Atom feeds and every other page under `/gateway/` (LOCKSS, CLOCKSS, gateway plugins) ended in a server error. To tell a real page from a missing one, the plugin loads the page's `index.php` the way OJS does. OJS 3.5's gateway page needs the `$request` variable that OJS gives it, and the plugin did not provide it. The plugin now provides it. If loading a page file fails for any other reason, the plugin steps aside and OJS handles the request as usual.

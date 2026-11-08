@@ -31,10 +31,17 @@ use PKP\plugins\GenericPlugin;
 use PKP\plugins\Hook;
 use PKP\submission\PKPSubmission;
 
+// Not OJS 3.4 / 3.5 (the package was unpacked into an OJS 3.3 site): stop
+// before the class is declared, so its missing parent cannot cause a fatal
+// error. index.php gives OJS 3.3 an inert placeholder instead.
+if (!class_exists(GenericPlugin::class)) {
+    return;
+}
+
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '3.0.0.2';
+    const PLUGIN_VERSION = '4.0.0.0';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';
