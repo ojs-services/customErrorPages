@@ -1,5 +1,8 @@
 # Changelog — Custom Error Pages
 
+## 3.0.0.5 — 2026-11-26 (OJS 3.3)
+- Package details: the compatibility entry now covers every OJS 3.3.0 release. No change in behaviour.
+
 ## 3.0.0.4 — 2026-11-26 (OJS 3.3)
 - Fixed: on sites where another plugin brings its own class loader, OJS's command-line tools (upgrade check, plugin install) could stop with "Cannot declare class GenericPlugin". The plugin's OJS version check no longer triggers class loading.
 
