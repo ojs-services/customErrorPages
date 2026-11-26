@@ -1,5 +1,9 @@
 # Changelog — Custom Error Pages
 
+## 4.0.0.1 — 2026-11-26 (OJS 3.4–3.5)
+- Fixed: if this package is installed on OJS 3.3 by mistake on a site where another plugin brings its own class loader, OJS's command-line tools and pages no longer stop with "Cannot declare class GenericPlugin". The plugin stays off there.
+- Package details: the compatibility entry now covers every OJS 3.4.0 and 3.5.0 release.
+
 ## 4.0.0.0 — 2026-11-08 (OJS 3.4–3.5)
 - Fixed: if this package is installed on OJS 3.3 by mistake, it no longer breaks the site or its command-line tools. The plugin list shows it as the wrong package; install the OJS 3.3 package there.
 - Version numbers: the OJS 3.4–3.5 package moves to 4.x and the OJS 3.3 package stays on 3.0.0.x, so the two can no longer be mixed up. One package now serves OJS 3.4 and 3.5: `customErrorPages-ojs3.4-3.5-4.0.0.0.tar.gz`. Upgrading from 3.0.0.2 works as usual.

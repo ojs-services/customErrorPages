@@ -12,6 +12,7 @@
  *}
 <!DOCTYPE html>
 <html lang="{$customErrorLang|escape}" dir="{$customErrorDir|escape}">
+{* tara-yoksay: S01 page shown inside a frame; the theme header would nest the whole site in it *}
 <head>
 	<meta charset="{$defaultCharset|default:'utf-8'|escape}">
 	<meta name="viewport" content="width=device-width, initial-scale=1">

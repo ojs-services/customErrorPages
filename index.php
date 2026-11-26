@@ -15,11 +15,18 @@
  * whole site, its command-line tools included. There we return an inert
  * placeholder that adds no hooks and tells the administrator in the plugin
  * list which package to install instead.
+ *
+ * The line check asks for a class that OJS 3.4+ has always loaded by now and
+ * that OJS 3.3 does not have, WITHOUT autoloading (second argument false): on
+ * 3.3 an autoload attempt can reach another plugin's broad autoloader, which
+ * loads GenericPlugin a second time ("Cannot declare class GenericPlugin").
  */
 
-if (!class_exists('PKP\\plugins\\GenericPlugin')) {
+if (!class_exists('PKP\\core\\PKPApplication', false)) {
     // OJS 3.3: wrong package.
+    // tara-yoksay: P04 this branch only runs on OJS 3.3, where import() exists
     import('lib.pkp.classes.plugins.GenericPlugin');
+    // tara-yoksay: P06 OJS 3.3 placeholder class (global name on purpose)
     if (!class_exists('CustomErrorPagesPlugin', false)) {
         class CustomErrorPagesPlugin extends GenericPlugin
         {
