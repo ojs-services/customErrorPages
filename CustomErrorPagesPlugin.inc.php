@@ -16,15 +16,16 @@
  */
 
 // Not OJS 3.3 (the package was unpacked into an OJS 3.4 or 3.5 site): stop
-// before any 3.3-only code runs. index.php keeps the plugin off there.
-if (class_exists('PKP\\plugins\\GenericPlugin')) return;
+// before any 3.3-only code runs. index.php keeps the plugin off there. The test
+// must not autoload (see index.php for why, and why this class).
+if (class_exists('PKP\\core\\PKPApplication', false)) return;
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '3.0.0.3';
+    const PLUGIN_VERSION = '3.0.0.4';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';
