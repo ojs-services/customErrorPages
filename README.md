@@ -1,5 +1,7 @@
 # Custom Error Pages
 
+[Türkçe](README_TR.md)
+
 A plugin for **OJS 3.3** that replaces OJS' bare `404 Not Found` message with a friendly error page in your journal's own theme, with its header, footer and menu. It works with any theme and needs no changes to OJS.
 
 The themed page is shown for unknown pages, deleted articles, missing issues, unknown journal paths and missing files. For a missing file, it links back to the article or issue.

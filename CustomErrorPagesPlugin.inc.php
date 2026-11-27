@@ -25,7 +25,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '3.0.0.5';
+    const PLUGIN_VERSION = '3.0.0.6';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';
@@ -56,6 +56,23 @@ class CustomErrorPagesPlugin extends GenericPlugin
 
     /** @var bool This request is an issue galley download whose file is gone. */
     private static $_issueFileMissing = false;
+
+    /**
+     * English fallback for this plugin's own texts (OJS 3.3 shows ##key## for
+     * a key missing in the interface language): the English file goes FIRST.
+     * OJS searches the registered files from the last one back, so the
+     * language's own file wins and anything it lacks comes from English. Our
+     * English file holds only our own keys, so OJS's texts are not affected.
+     */
+    public function getLocaleFilename($locale)
+    {
+        $files = (array) parent::getLocaleFilename($locale);
+        $english = $this->getPluginPath() . '/locale/en_US/locale.po';
+        if ($locale !== 'en_US' && file_exists($english)) {
+            array_unshift($files, $english);
+        }
+        return $files;
+    }
 
     public function register($category, $path, $mainContextId = null)
     {

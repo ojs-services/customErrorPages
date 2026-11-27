@@ -1,5 +1,9 @@
 # Changelog — Custom Error Pages
 
+## 3.0.0.6 — 2026-11-27 (OJS 3.3)
+- Interface languages without a translation of this plugin now show its texts in English instead of raw keys (`##plugins.generic.customErrorPages…##`). A language that has its own translation still comes first; a text missing from it falls back to English. Only this plugin's texts are affected.
+- Turkish README added (`README_TR.md`).
+
 ## 3.0.0.5 — 2026-11-26 (OJS 3.3)
 - Package details: the compatibility entry now covers every OJS 3.3.0 release. No change in behaviour.
 
