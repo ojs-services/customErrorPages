@@ -1,5 +1,9 @@
 # Changelog — Custom Error Pages
 
+## 4.0.0.2 — 2026-11-27 (OJS 3.4–3.5)
+- Interface languages without a translation of this plugin now show its texts in English instead of raw keys (`##plugins.generic.customErrorPages…##`). A language that has its own translation still comes first; a text missing from it falls back to English. Only this plugin's texts are affected.
+- Turkish README added (`README_TR.md`).
+
 ## 4.0.0.1 — 2026-11-26 (OJS 3.4–3.5)
 - Fixed: if this package is installed on OJS 3.3 by mistake on a site where another plugin brings its own class loader, OJS's command-line tools and pages no longer stop with "Cannot declare class GenericPlugin". The plugin stays off there.
 - Package details: the compatibility entry now covers every OJS 3.4.0 and 3.5.0 release.

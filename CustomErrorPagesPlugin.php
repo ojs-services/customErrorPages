@@ -25,6 +25,7 @@ use PKP\config\Config;
 use PKP\core\JSONMessage;
 use PKP\core\PKPPageRouter;
 use PKP\db\DAORegistry;
+use PKP\facades\Locale;
 use PKP\linkAction\LinkAction;
 use PKP\linkAction\request\AjaxModal;
 use PKP\plugins\GenericPlugin;
@@ -41,7 +42,7 @@ if (!class_exists(GenericPlugin::class)) {
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '4.0.0.1';
+    const PLUGIN_VERSION = '4.0.0.2';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';
@@ -51,6 +52,12 @@ class CustomErrorPagesPlugin extends GenericPlugin
 
     /** Longest background image URL that is stored or emitted. */
     const MAX_URL_LENGTH = 255;
+
+    /** This plugin's locale keys start with this. */
+    const LOCALE_PREFIX = 'plugins.generic.customErrorPages.';
+
+    /** @var bool The English fallback is registered in this request already. */
+    private static $_englishFallbackRegistered = false;
 
     /** @var string|null OJS root cwd, captured while healthy for the shutdown net. */
     private static $_rootDir = null;
@@ -76,6 +83,8 @@ class CustomErrorPagesPlugin extends GenericPlugin
     public function register($category, $path, $mainContextId = null)
     {
         $success = parent::register($category, $path, $mainContextId);
+        // before the "enabled" check: the plugin list shows our name even when off
+        $this->_registerEnglishFallback();
         if ($success) $this->_checkInstallStamp();
 
         $enabled = $success && $this->getEnabled($mainContextId);
@@ -616,6 +625,30 @@ class CustomErrorPagesPlugin extends GenericPlugin
      * PKPApplication::execute() turns into the same bare 404 body). Either way
      * the shutdown net below then themes it. Does not return.
      */
+    /**
+     * English fallback for this plugin's own texts: OJS 3.4/3.5 show ##key##
+     * for a key missing in the interface language (a language we have no file
+     * for, or a key not yet translated). Only keys with our prefix are touched,
+     * so OJS's and other plugins' texts are never changed.
+     */
+    private function _registerEnglishFallback(): void
+    {
+        if (self::$_englishFallbackRegistered) return;
+        self::$_englishFallbackRegistered = true;
+        Hook::add('Locale::translate', function (string $hookName, array $args): bool {
+            $value = &$args[0];
+            $key = (string) $args[1];
+            $locale = (string) $args[4];
+            if ($locale === 'en' || strpos($key, self::LOCALE_PREFIX) !== 0) return Hook::CONTINUE;
+            $english = $args[3] === null
+                ? Locale::get($key, (array) $args[2], 'en')
+                : Locale::choice($key, (int) $args[3], (array) $args[2], 'en');
+            if (strpos($english, '##') === 0) return Hook::CONTINUE; // not in English either
+            $value = $english;
+            return Hook::ABORT;
+        });
+    }
+
     public static function notFound()
     {
         $dispatcher = Application::get()->getRequest()->getDispatcher();
