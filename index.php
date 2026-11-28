@@ -44,7 +44,7 @@ if (!class_exists('PKP\\core\\PKPApplication', false)) {
             public function getDescription()
             {
                 return 'This package is for OJS 3.4 and 3.5 and does nothing on this site. '
-                    . 'Delete it and install the OJS 3.3 package (customErrorPages-ojs3.3-<version>.tar.gz).';
+                    . 'Delete it and install the OJS 3.3 package: the file whose name starts with customErrorPages-ojs3.3-';
             }
         }
     }

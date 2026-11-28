@@ -1,5 +1,8 @@
 # Changelog — Custom Error Pages
 
+## 4.0.0.3 — 2026-11-28 (OJS 3.4–3.5)
+- If this package is installed on OJS 3.3 by mistake, its description in the plugin list now names the package to install there correctly (the file whose name starts with `customErrorPages-ojs3.3-`). Before, part of the file name was missing.
+
 ## 4.0.0.2 — 2026-11-27 (OJS 3.4–3.5)
 - Interface languages without a translation of this plugin now show its texts in English instead of raw keys (`##plugins.generic.customErrorPages…##`). A language that has its own translation still comes first; a text missing from it falls back to English. Only this plugin's texts are affected.
 - Turkish README added (`README_TR.md`).

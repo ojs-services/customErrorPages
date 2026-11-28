@@ -42,7 +42,7 @@ if (!class_exists(GenericPlugin::class)) {
 class CustomErrorPagesPlugin extends GenericPlugin
 {
     /** Must equal <release> in version.xml (checked by the release tests). */
-    const PLUGIN_VERSION = '4.0.0.2';
+    const PLUGIN_VERSION = '4.0.0.3';
 
     /** OJS' bare 404 body, exactly as fatalError() echoes it (22 bytes). */
     const BARE_404_BODY = '<h1>404 Not Found</h1>';
